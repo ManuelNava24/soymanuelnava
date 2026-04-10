@@ -1,0 +1,5 @@
+  #contact-message {
+    resize: none; /* desactiva la esquina para agrandar */
+    min-height: 120px; /* altura mínima */
+    max-height: 120px; /* altura máxima igual a la mínima */
+  }

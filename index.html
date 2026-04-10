@@ -1,0 +1,423 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="styles/styles.css">
+  <title>Portafolio — Manuel Nava | Desarrollador Web</title>
+  <meta name="description" content="Portafolio profesional de desarrollador web — diseño responsive, proyectos, servicios y contacto." />
+  <link rel="icon" href="data:;base64,iVBORw0KGgo="> 
+  <style>
+    :root{
+      --bg:#0f1724; --card:#0b1220; --muted:#94a3b8; --accent:#6ee7b7; --accent-2:#60a5fa; --glass: rgba(255,255,255,0.04);
+      --radius:14px; --pad:1.25rem; --maxw:1100px; --ff: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; background:linear-gradient(180deg,#071021 0%, #081428 50%), var(--bg); color:#e6eef8; font-family:var(--ff); -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+      line-height:1.45; padding:3rem 1rem;
+      display:flex; justify-content:center;
+    }
+    .wrap{width:100%; max-width:var(--maxw)}
+
+    /* NAV */
+    header{display:flex; align-items:center; justify-content:space-between; gap:1rem; margin-bottom:1.6rem}
+    .brand{display:flex; align-items:center; gap:.8rem}
+    .logo{width:56px; height:56px; background:linear-gradient(135deg,var(--accent),var(--accent-2)); border-radius:10px; display:grid; place-items:center; font-weight:700; color:#032; font-size:18px}
+    .site-title{font-weight:700}
+    nav{display:flex; gap:1rem; align-items:center}
+    nav a{color:var(--muted); text-decoration:none; padding:.45rem .7rem; border-radius:10px; font-weight:600}
+    nav a:hover{color:white; background:rgba(255,255,255,0.03)}
+
+    /* Hamburger (mobile) */
+    .hamburger{display:none; width:48px; height:48px; background:var(--glass); border-radius:12px; align-items:center; justify-content:center; cursor:pointer}
+    .hamburger .lines{position:relative; width:22px; height:14px}
+    .hamburger .lines span{position:absolute; left:0; right:0; height:2px; background:#e6eef8; display:block; transition:transform .35s cubic-bezier(.2,.9,.2,1), opacity .25s}
+    .lines span:nth-child(1){top:0}
+    .lines span:nth-child(2){top:6px}
+    .lines span:nth-child(3){top:12px}
+
+    /* Mobile menu (toggle) */
+    .mobile-menu{
+      position:fixed;
+      inset:0;
+      z-index:1200;
+      background:linear-gradient(180deg, rgba(2,6,23,0.95), rgba(2,6,23,0.98));
+      transform:translateY(-6%) scale(.995);
+      opacity:0;
+      transition:transform .45s cubic-bezier(.2,.9,.2,1), opacity .3s ease;
+      display:flex;
+      flex-direction:column;
+      padding:4rem 1.25rem;
+      will-change:transform, opacity;
+      pointer-events:none;
+    }
+    .mobile-menu.open{
+      transform:translateY(0) scale(1);
+      opacity:1;
+      pointer-events:auto;
+    }
+    .mobile-menu a{color:#dbeafe; font-size:1.05rem; text-decoration: none; padding:.8rem 0; border-bottom:1px solid rgba(255,255,255,0.03)}
+    .mobile-menu a:focus{outline:2px solid rgba(96,165,250,0.18); outline-offset:4px; border-radius:6px}
+
+    /* HERO */
+    .hero{display:grid; grid-template-columns:1fr 420px; gap:1.6rem; align-items:center; margin-bottom:1.4rem}
+    .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); padding:var(--pad); border-radius:var(--radius); box-shadow: 0 6px 22px rgba(2,6,23,0.6); backdrop-filter: blur(6px)}
+    .hero-left h1{font-size:clamp(1.6rem, 3.5vw, 2.4rem); margin:0 0 .6rem}
+    .hero-left p{color:var(--muted); margin:0 0 1rem}
+    .cta-row{display:flex; gap:.8rem; flex-wrap:wrap}
+    .btn{display:inline-flex; gap:.6rem; align-items:center; padding:.6rem .9rem; border-radius:12px; border:0; cursor:pointer; font-weight:700}
+    .btn-primary{background:linear-gradient(90deg,var(--accent),var(--accent-2)); color:#022}
+    .btn-ghost{background:transparent; color:var(--muted); border:1px solid rgba(255,255,255,0.04)}
+
+    .hero-right{display:grid; gap:.6rem}
+    .profile{height:100%; display:flex; flex-direction:column; gap:.6rem; align-items:center; justify-content:center}
+    .profile img{width:100%; border-radius:12px; max-height:300px; object-fit:cover}
+
+    /* SECTIONS */
+    section{margin-bottom:1.3rem}
+    .grid-3{display:grid; grid-template-columns:repeat(3,1fr); gap:1rem}
+    .service{padding:1rem; border-radius:12px}
+    .projects-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:1rem}
+    .project{overflow:hidden; border-radius:10px; min-height:140px; display:flex; align-items:flex-end; padding:1rem}
+    .muted{color:var(--muted)}
+
+    /* CONTACT */
+    form{display:grid; gap:.6rem}
+    input,textarea{padding:.7rem; border-radius:8px; border:1px solid rgba(255,255,255,0.04); background:transparent; color:inherit}
+    textarea{min-height:110px}
+
+    footer{color:var(--muted); font-size:.9rem; padding:1rem 0; text-align:center}
+
+    /* RESPONSIVE */
+    @media (max-width:980px){
+      .hero{grid-template-columns:1fr}
+      .hero-right{order:-1}
+      .grid-3, .projects-grid{grid-template-columns:repeat(2,1fr)}
+    }
+    @media (max-width:640px){
+      body{padding:1rem}
+      nav{display:none}
+      .hamburger{display:flex}
+      .hero{gap:1rem}
+      .projects-grid{grid-template-columns:1fr}
+      .grid-3{grid-template-columns:1fr}
+      header{align-items:center}
+      .wrap{padding-bottom:4rem}
+
+      /* animate hamburger to X when open */
+      .hamburger.open .lines span:nth-child(1){transform:translateY(6px) rotate(45deg)}
+      .hamburger.open .lines span:nth-child(2){opacity:0}
+      .hamburger.open .lines span:nth-child(3){transform:translateY(-6px) rotate(-45deg)}
+    }
+
+    /* small niceties */
+    .highlight{background:linear-gradient(90deg, rgba(110,231,183,0.14), rgba(96,165,250,0.12)); padding:.2rem .45rem; border-radius:8px; color:var(--accent)}
+
+    @media (prefers-reduced-motion: reduce){*{transition:none!important}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <div class="logo">MN</div>
+        <div>
+          <div class="site-title">Manuel Nava</div>
+          <div class="muted" style="font-size:.85rem">Desarrollador de páginas web — Frontend &amp; Web apps</div>
+        </div>
+      </div>
+
+      <nav aria-label="Menú principal">
+        <a href="#inicio">Inicio</a>
+        <a href="#servicios">Servicios</a>
+        <a href="#proyectos">Proyectos</a>
+        <a href="#contacto">Contacto</a>
+      </nav>
+
+      <button class="hamburger" aria-expanded="false" aria-label="Abrir menú">
+        <span class="lines" aria-hidden="true">
+          <span></span><span></span><span></span>
+        </span>
+      </button>
+    </header>
+
+    <div class="mobile-menu" aria-hidden="true">
+      <a href="#inicio">Inicio</a>
+      <a href="#servicios">Servicios</a>
+      <a href="#proyectos">Proyectos</a>
+      <a href="#contacto">Contacto</a>
+      <div style="margin-top:auto; color:var(--muted); font-size:.95rem">© <span id="yr"></span> Manuel Nava — Derechos reservados</div>
+    </div>
+
+    <main>
+      <section id="inicio" class="hero">
+        <div class="card hero-left">
+          <h1>Hola, soy <span class="highlight">Manuel Nava</span><br><small style="font-weight:600; font-size:.86rem; color:var(--muted)">Desarrollo páginas web profesionales y experiencias digitales</small></h1>
+          <p class="muted">Me especializo en construir sitios responsivos, performantes y con una interfaz pensada para conversiones. Trabajo con HTML, CSS moderno (Flexbox/ Grid), JavaScript y frameworks front-end.</p>
+          <div class="cta-row">
+            <button class="btn btn-primary" onclick="document.getElementById('contacto').scrollIntoView({behavior:'smooth'})">Contratarme</button>
+            <a class="btn btn-ghost" href="#proyectos">Ver proyectos</a>
+          </div>
+          <div style="margin-top:1rem; color:var(--muted); font-size:.92rem">Especialidades: <span style="color:var(--accent)">Responsive</span> • <span style="color:var(--accent-2)">UI/UX</span> • <span style="color:var(--accent)">Performance</span></div>
+        </div>
+
+        <aside class="card hero-right">
+          <div class="profile">
+            <!-- Reemplaza la imagen por tu foto o captura de proyecto -->
+            <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=800&q=60" alt="Foto de muestra" />
+            <div style="text-align:center">
+              <div style="font-weight:700">Disponible para proyectos</div>
+              <div class="muted" style="font-size:.9rem">Trabajo remoto / horario flexible</div>
+            </div>
+          </div>
+        </aside>
+      </section>
+
+    <section id="servicios" class="card">
+      <h2 style="margin:0 0 .6rem">Servicios</h2>
+      <div class="grid-3">
+        <div class="service card">
+          <h3 style="margin:0 0 .4rem">Web para PyMEs</h3>
+          <p class="muted">Presencia digital profesional para pequeños negocios, enfocada en atraer clientes locales.</p>
+        </div>
+        <div class="service card">
+          <h3 style="margin:0 0 .4rem">Landing Pages</h3>
+          <p class="muted">Páginas de alta conversión optimizadas para campañas específicas y lanzamientos rápidos.</p>
+        </div>
+        <div class="service card">
+          <h3 style="margin:0 0 .4rem">Despliegue y Hosting</h3>
+          <p class="muted">Configuración y publicación de sitios en Netlify para garantizar velocidad máxima y seguridad SSL.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="proyectos">
+  <h2 style="margin:0 0 .6rem; font-size:1.3rem;">Proyectos destacados</h2>
+  <div class="projects-grid">
+    <!-- Proyecto ejemplo -->
+     <div class="project card" 
+        data-title="Página web - Restaurante" 
+        data-desc="Desarrollé un sitio web responsive y moderno para un restaurante." 
+        data-img="imagenes/horizonte.png"
+        style="display:flex; flex-direction:column; align-items:center;">
+    <img src="imagenes/horizonte.png" alt="Mi Página Web" 
+        style="width:100%; border-radius:10px; object-fit:cover; height:140px; display:block;">
+    <div style="padding:.4rem 0; width:100%; text-align:center;">
+        <h4 style="margin:0; font-size:0.9rem;">Página web - Restaurante</h4>
+    </div>
+    </div>
+
+
+    <!-- Proyecto ejemplo -->
+    <div class="project card" 
+        data-title="Página web - YoGoBoom" 
+        data-desc="Desarrollé un sitio web responsive y moderno para un cliente local." 
+        data-img="imagenes/yogoboom.png"
+        style="display:flex; flex-direction:column; align-items:center;">
+    <img src="imagenes/yogoboom.png" alt="Mi Página Web" 
+        style="width:100%; border-radius:10px; object-fit:cover; height:140px; display:block;">
+    <div style="padding:.4rem 0; width:100%; text-align:center;">
+        <h4 style="margin:0; font-size:0.9rem;">Página web - YoGoBoom</h4>
+    </div>
+    </div>
+    <!-- Proyecto ejemplo -->
+    <div class="project card" 
+        data-title="Página web - Papelería" 
+        data-desc="Desarrollé un sitio web responsive y moderno para una papelería." 
+        data-img="imagenes/coloresdeabril.png"
+        style="display:flex; flex-direction:column; align-items:center;">
+    <img src="imagenes/coloresdeabril.png" alt="Mi Página Web" 
+        style="width:100%; border-radius:10px; object-fit:cover; height:140px; display:block;">
+    <div style="padding:.4rem 0; width:100%; text-align:center;">
+        <h4 style="margin:0; font-size:0.9rem;">Página web - Papelería</h4>
+    </div>
+    </div>
+
+
+    <!-- Puedes añadir más proyectos aquí -->
+  </div>
+</section>
+
+<!-- Modal para mostrar proyecto -->
+<div id="project-modal" style="position:fixed; inset:0; display:none; justify-content:center; align-items:center; background:rgba(0,0,0,0.8); z-index:9999; padding:1rem;">
+  <div style="background:#0f1724; border-radius:14px; max-width:700px; width:100%; max-height:90vh; overflow:auto; padding:1rem; position:relative;">
+    <button id="modal-close" style="position:absolute; top:1rem; right:1rem; background:none; border:none; color:#fff; font-size:1.5rem; cursor:pointer;">×</button>
+    <h3 id="modal-title" style="margin-top:0; color:#6ee7b7; font-size:1rem;"></h3>
+    <img id="modal-img" src="" alt="" style="width:100%; border-radius:10px; margin:0.6rem 0;">
+    <p id="modal-desc" style="color:#dbeafe; font-size:0.9rem;"></p>
+  </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const projects = document.querySelectorAll(".projects-grid .project");
+  const modal = document.getElementById("project-modal");
+  const modalTitle = document.getElementById("modal-title");
+  const modalImg = document.getElementById("modal-img");
+  const modalDesc = document.getElementById("modal-desc");
+  const modalClose = document.getElementById("modal-close");
+
+  projects.forEach(project => {
+    project.addEventListener("click", () => {
+      modalTitle.textContent = project.dataset.title;
+      modalDesc.textContent = project.dataset.desc;
+      modalImg.src = project.dataset.img;
+      modal.style.display = "flex";
+      document.body.style.overflow = "hidden"; // evitar scroll de fondo
+    });
+  });
+
+  modalClose.addEventListener("click", () => {
+    modal.style.display = "none";
+    document.body.style.overflow = ""; // restaurar scroll
+  });
+
+  // Cerrar modal al hacer clic fuera del contenido
+  modal.addEventListener("click", (e) => {
+    if(e.target === modal) {
+      modal.style.display = "none";
+      document.body.style.overflow = "";
+    }
+  });
+});
+</script>
+
+  <section id="contacto" class="card" style="margin-top:1rem">
+  <h2>Contacto</h2>
+  <p class="muted">Envíame un mensaje directo a WhatsApp con lo que necesitas. 🚀</p>
+
+  <form id="contact-form">
+    <input id="contact-name" name="name" type="text" placeholder="Tu nombre" required />
+    <textarea id="contact-message" name="message" placeholder="Escribe tu mensaje aquí" required></textarea>
+
+    <div style="display:flex; gap:.6rem; flex-wrap:wrap; margin-top:.5rem">
+      <button type="button" class="btn btn-primary" id="whatsapp-btn">
+        Enviar por WhatsApp
+      </button>
+    </div>
+  </form>
+</section>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const whatsappBtn = document.getElementById("whatsapp-btn");
+
+  // Reemplaza este número con tu WhatsApp en formato internacional sin '+' ni espacios
+  const whatsappNumber = "524811522033"; // Ejemplo: México 481...
+
+  whatsappBtn.addEventListener("click", function () {
+    const name = document.getElementById("contact-name").value.trim();
+    const messageText = document.getElementById("contact-message").value.trim();
+
+    if (!name || !messageText) {
+      alert("Por favor completa tu nombre y mensaje.");
+      return;
+    }
+
+    // Construye el mensaje para WhatsApp
+    const message = `Hola Manuel, soy ${name}.\n${messageText}`;
+    const encodedMessage = encodeURIComponent(message);
+    const url = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
+
+    window.open(url, "_blank");
+  });
+});
+</script>
+
+      <footer>
+        <div class="muted">Hecho con ❤️ — Manuel Nava | Diseñador Web • <span id="yr2"></span></div>
+      </footer>
+    </main>
+  </div>
+
+  <script>
+document.addEventListener('DOMContentLoaded', function () {
+  const ham = document.querySelector('.hamburger');
+  const menu = document.querySelector('.mobile-menu');
+  const yr = new Date().getFullYear();
+  const openClass = 'open';
+
+  // safe year insertion
+  const yrEl = document.getElementById('yr');
+  const yr2El = document.getElementById('yr2');
+  if (yrEl) yrEl.textContent = yr;
+  if (yr2El) yr2El.textContent = yr;
+
+  if (!ham || !menu) return; // nothing to do if elements are missing
+
+  // ensure menu has an id for aria-controls
+  if (!menu.id) menu.id = 'mobile-menu';
+  ham.setAttribute('aria-controls', menu.id);
+
+  // Toggle function with explicit open/close and accessibility handling
+  function toggleMenu(forceState) {
+    const isOpen = menu.classList.contains(openClass);
+    const shouldOpen = typeof forceState === 'boolean' ? forceState : !isOpen;
+
+    if (shouldOpen) {
+      menu.classList.add(openClass);
+      ham.classList.add(openClass);
+      ham.setAttribute('aria-expanded', 'true');
+      menu.setAttribute('aria-hidden', 'false');
+      // prevent background scroll on mobile
+      document.documentElement.style.overflow = 'hidden';
+      // move focus to first link for accessibility
+      const firstLink = menu.querySelector('a');
+      if (firstLink) firstLink.focus();
+    } else {
+      menu.classList.remove(openClass);
+      ham.classList.remove(openClass);
+      ham.setAttribute('aria-expanded', 'false');
+      menu.setAttribute('aria-hidden', 'true');
+      document.documentElement.style.overflow = '';
+      // return focus to hamburger
+      ham.focus();
+    }
+  }
+
+  // click on hamburger
+  ham.addEventListener('click', function (e) {
+    e.preventDefault();
+    toggleMenu();
+  });
+
+  // close when clicking a link inside mobile menu
+  menu.addEventListener('click', function (e) {
+    const link = e.target.closest('a');
+    if (link) {
+      // allow link default handling (smooth scroll handled elsewhere)
+      toggleMenu(false);
+    }
+  });
+
+  // close with Escape key
+  document.addEventListener('keydown', function (e) {
+    if ((e.key === 'Escape' || e.key === 'Esc') && menu.classList.contains(openClass)) {
+      toggleMenu(false);
+    }
+  });
+
+  // close when clicking outside the menu and the hamburger
+  document.addEventListener('click', function (e) {
+    if (!menu.contains(e.target) && !ham.contains(e.target) && menu.classList.contains(openClass)) {
+      toggleMenu(false);
+    }
+  });
+
+  // Smooth scrolling for fragment links (keeps previous behavior)
+  document.querySelectorAll('a[href^="#"]').forEach(function(a){
+    a.addEventListener('click', function(e){
+      const id = a.getAttribute('href');
+      if (id && id.length > 1) {
+        e.preventDefault();
+        const target = document.querySelector(id);
+        if (target) target.scrollIntoView({ behavior: 'smooth' });
+      }
+    });
+  });
+});
+</script>
+</body>
+</html>
